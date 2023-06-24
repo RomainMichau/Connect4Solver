@@ -1,0 +1,21 @@
+<div class="current-player">
+  Current Player:
+  <div class="color-square" [ngStyle]="{ backgroundColor: getColor(currentPlayerColor) }"></div>
+</div>
+
+<div class="game-mode">
+  <button (click)="toggleGameMode()">Toggle Game Mode</button>
+  <span *ngIf="yellowIsAi">Game Mode: AI</span>
+  <span *ngIf="!yellowIsAi">Game Mode: Human</span>
+</div>
+
+
+<div class="connect4-grid-container">
+  <table class="connect4-grid">
+    <tr *ngFor="let row of connect4Grid">
+      <td *ngFor="let cell of row" [ngClass]="getCellStyle(cell)" (click)="addToken(getColumnIndex($event.target))">
+      </td>
+    </tr>
+  </table>
+  <button (click)="resetGrid()">Reset</button>
+</div>

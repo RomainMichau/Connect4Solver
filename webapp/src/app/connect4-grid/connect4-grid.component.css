@@ -1,0 +1,38 @@
+.connect4-grid-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.connect4-grid {
+  width: 20%;
+  border-collapse: collapse;
+}
+
+.connect4-grid td {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.cell-red {
+  background-color: red;
+}
+
+.cell-yellow {
+  background-color: #ffd500;
+}
+
+.cell-empty {
+  background-color: transparent;
+}
+
+ .color-square {
+   width: 20px;
+   height: 20px;
+   display: inline-block;
+   border-radius: 50%;
+   margin-left: 10px;
+ }
+

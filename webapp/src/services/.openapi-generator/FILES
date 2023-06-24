@@ -1,0 +1,15 @@
+.gitignore
+README.md
+api.module.ts
+api/api.ts
+api/game.service.ts
+configuration.ts
+encoder.ts
+git_push.sh
+index.ts
+model/addTokenResponseBody.ts
+model/badRequestErrorBody.ts
+model/getGridResponseBody.ts
+model/models.ts
+param.ts
+variables.ts

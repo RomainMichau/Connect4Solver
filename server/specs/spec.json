@@ -1,0 +1,171 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "Documentation of our connect4 API.",
+    "title": "connect4 API.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/grid": {
+      "get": {
+        "description": "Return the current grid the game",
+        "tags": [
+          "game"
+        ],
+        "operationId": "getGrid",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/GetGridResponse"
+          }
+        }
+      }
+    },
+    "/api/grid/reset": {
+      "post": {
+        "tags": [
+          "game"
+        ],
+        "operationId": "resetGame",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/token": {
+      "post": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "game"
+        ],
+        "operationId": "postToken",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Column to add the token",
+            "name": "column",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/AddTokenResponse"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AddTokenResponseBody": {
+      "type": "object",
+      "required": [
+        "Line",
+        "Column",
+        "Cell",
+        "CurrentPlayerColor",
+        "PlayerWon"
+      ],
+      "properties": {
+        "Cell": {
+          "$ref": "#/definitions/Cell"
+        },
+        "Column": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "CurrentPlayerColor": {
+          "$ref": "#/definitions/Player"
+        },
+        "Line": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "PlayerWon": {
+          "type": "boolean"
+        }
+      },
+      "x-go-package": "connect4solver"
+    },
+    "BadRequestErrorBody": {
+      "type": "object",
+      "required": [
+        "Reason"
+      ],
+      "properties": {
+        "Reason": {
+          "type": "string"
+        }
+      },
+      "x-go-package": "connect4solver"
+    },
+    "Cell": {
+      "type": "integer",
+      "format": "int64",
+      "x-go-package": "connect4solver/game"
+    },
+    "GetGridResponseBody": {
+      "type": "object",
+      "required": [
+        "Grid",
+        "CurrentPlayerColor"
+      ],
+      "properties": {
+        "CurrentPlayerColor": {
+          "$ref": "#/definitions/Player"
+        },
+        "Grid": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Cell"
+            }
+          }
+        }
+      },
+      "x-go-package": "connect4solver"
+    },
+    "Player": {
+      "type": "integer",
+      "format": "int64",
+      "x-go-package": "connect4solver/game"
+    }
+  },
+  "responses": {
+    "AddTokenResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/AddTokenResponseBody"
+      }
+    },
+    "BadRequestError": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/BadRequestErrorBody"
+      }
+    },
+    "GetGridResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/GetGridResponseBody"
+      }
+    }
+  }
+}

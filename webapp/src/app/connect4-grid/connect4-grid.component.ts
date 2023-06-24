@@ -7,11 +7,25 @@ import {ActivatedRoute, Router} from "@angular/router";
   templateUrl: './connect4-grid.component.html',
   styleUrls: ['./connect4-grid.component.css']
 })
+
+class Player {
+  constructor(private color: number) {
+  }
+
+  isAi: boolean = false
+
+  toString(): string {
+    if (this.color == 1) {
+      return "yellow"
+    }
+    return "red"
+  }
+}
+
 export class Connect4GridComponent implements OnInit {
   connect4Grid: number[][] = [];
-  currentPlayerColor: number = 0;
-  redIsAi: boolean = false;
-  yellowIsAi: boolean = false;
+  players: Player[] = [new Player(0), new Player(1)]
+  currentPlayer: Player = this.players[0];
 
   constructor(private service: GameService, private route: ActivatedRoute, private router: Router) {
   }
@@ -19,15 +33,15 @@ export class Connect4GridComponent implements OnInit {
   ngOnInit(): void {
     this.service.getGrid().subscribe(data => {
         this.connect4Grid = data.Grid;
-        this.currentPlayerColor = data.CurrentPlayerColor;
+        this.currentPlayer = this.players[data.CurrentPlayerColor];
       },
       error => {
         console.error('Failed to fetch Connect 4 grid data', error);
       })
 
     this.route.queryParams.subscribe(params => {
-      this.redIsAi = params['redIsAi'];
-      this.yellowIsAi = params['yellowIsAi'];
+      this.players[1].isAi = params['redIsAi'];
+      this.players[0].isAi = params['yellowIsAi'];
     });
   }
 
@@ -40,7 +54,7 @@ export class Connect4GridComponent implements OnInit {
         const winner = response.Cell == 1 ? 'yellow' : 'red';
         alert(`Player ${winner.toUpperCase()} wins!`);
       }
-      this.currentPlayerColor = response.CurrentPlayerColor
+      this.currentPlayer = this.players[response.CurrentPlayerColor];
     }, error => {
       alert(error.error.Reason)
     });
@@ -80,9 +94,9 @@ export class Connect4GridComponent implements OnInit {
 
 
   toggleGameMode(): void {
-    if (this.currentPlayerColor == 2)
+    if (this.currentPlayer == 2)
       this.yellowIsAi = !this.yellowIsAi;
-    else if (this.currentPlayerColor == 1)
+    else if (this.currentPlayer == 1)
       this.redIsAi = !this.redIsAi;
 
     // Update the query parameter based on the game mode

@@ -10,6 +10,7 @@ index.ts
 model/addTokenResponseBody.ts
 model/badRequestErrorBody.ts
 model/getGridResponseBody.ts
+model/miniMaxiResponseBody.ts
 model/models.ts
 param.ts
 variables.ts

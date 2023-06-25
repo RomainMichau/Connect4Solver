@@ -16,6 +16,7 @@ package main
 
 import (
 	"connect4solver/game"
+	"connect4solver/solver"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"log"
@@ -27,55 +28,13 @@ type Controller struct {
 	game *game.Game
 }
 
-// swagger:response AddTokenResponse
-type AddTokenResponse struct {
-	// in: body
-	Body *AddTokenResponseBody
-}
-
-type AddTokenResponseBody struct {
-	// Required: true
-	Line int
-	// Required: true
-	Column int
-	// Required: true
-	Cell game.Cell
-	// Required: true
-	CurrentPlayerColor game.Player
-	// Required: true
-	PlayerWon bool
-}
-
-// swagger:response BadRequestError
-type BadRequestError struct {
-	// in: body
-	body *BadRequestErrorBody
-}
-
-type BadRequestErrorBody struct {
-	// Required: true
-	Reason string
-}
-
-// swagger:response GetGridResponse
-type GetGridResponse struct {
-	// in: body
-	body *GetGridResponseBody
-}
-
-type GetGridResponseBody struct {
-	// Required: true
-	Grid [][]game.Cell
-	// Required: true
-	CurrentPlayerColor game.Player
-}
-
 func InitController(game *game.Game) {
 	controller := Controller{game: game}
 	r := mux.NewRouter()
 	r.HandleFunc("/api/grid", controller.getGrid)
 	r.HandleFunc("/api/token", controller.addTokenHandler)
 	r.HandleFunc("/api/grid/reset", controller.resetHandler)
+	r.HandleFunc("/api/solver/minimax", controller.miniMaxiHandler)
 	log.Println("starting server")
 	log.Fatal(http.ListenAndServe(":8081", r))
 }
@@ -93,18 +52,16 @@ func (c *Controller) getGrid(w http.ResponseWriter, r *http.Request) {
 
 // swagger:route POST /api/token game postToken
 //
-//	   Produces:
-//	   	  - application/json
-//		Parameters:
-//		  + name: column
-//		    in: query
-//		    description: Column to add the token
-//		    required: true
-//		    type: integer
+//	Parameters:
+//	  + name: column
+//	    in: query
+//	    description: Column to add the token
+//	    required: true
+//	    type: integer
 //
-//		Responses:
-//		  200: AddTokenResponse
-//		  400: BadRequestError
+//	Responses:
+//	  200: AddTokenResponse
+//	  400: BadRequestError
 func (c *Controller) addTokenHandler(w http.ResponseWriter, r *http.Request) {
 	columnSt := r.URL.Query().Get("column")
 	if columnSt == "" {
@@ -123,16 +80,18 @@ func (c *Controller) addTokenHandler(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
-	column, line, cell, err := c.game.AddToken(column)
+	column, line, cell, currentPlayer, err := c.game.AddToken(column)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	json.NewEncoder(w).Encode(AddTokenResponseBody{
-		Column:             column,
-		Line:               line,
-		Cell:               cell,
-		CurrentPlayerColor: c.game.PlayerPlaying,
-		PlayerWon:          c.game.CheckWin(line, column),
+		Column:        column,
+		Line:          line,
+		AddedCell:     cell,
+		NextPlayer:    c.game.PlayerPlaying,
+		CurrentPlayer: currentPlayer,
+		PlayerWon:     c.game.CheckWin(line, column),
+		IsGridFull:    c.game.IsGridFull(),
 	})
 
 }
@@ -143,4 +102,14 @@ func (c *Controller) addTokenHandler(w http.ResponseWriter, r *http.Request) {
 //	  200:
 func (c *Controller) resetHandler(w http.ResponseWriter, r *http.Request) {
 	c.game.Reset()
+}
+
+// swagger:route POST /api/solver/minimax game minimax
+//
+//	Responses:
+//	  200: MiniMaxiResponse
+func (c *Controller) miniMaxiHandler(w http.ResponseWriter, r *http.Request) {
+	bestMove, _ := solver.MiniMax(c.game, 7, true)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(MiniMaxiResponseBody{BestMove: bestMove})
 }

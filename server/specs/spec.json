@@ -43,11 +43,21 @@
         }
       }
     },
+    "/api/solver/minimax": {
+      "post": {
+        "tags": [
+          "game"
+        ],
+        "operationId": "minimax",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/MiniMaxiResponse"
+          }
+        }
+      }
+    },
     "/api/token": {
       "post": {
-        "produces": [
-          "application/json"
-        ],
         "tags": [
           "game"
         ],
@@ -78,24 +88,32 @@
       "required": [
         "Line",
         "Column",
-        "Cell",
-        "CurrentPlayerColor",
-        "PlayerWon"
+        "AddedCell",
+        "NextPlayer",
+        "PlayerWon",
+        "IsGridFull",
+        "CurrentPlayer"
       ],
       "properties": {
-        "Cell": {
+        "AddedCell": {
           "$ref": "#/definitions/Cell"
         },
         "Column": {
           "type": "integer",
           "format": "int64"
         },
-        "CurrentPlayerColor": {
+        "CurrentPlayer": {
           "$ref": "#/definitions/Player"
+        },
+        "IsGridFull": {
+          "type": "boolean"
         },
         "Line": {
           "type": "integer",
           "format": "int64"
+        },
+        "NextPlayer": {
+          "$ref": "#/definitions/Player"
         },
         "PlayerWon": {
           "type": "boolean"
@@ -142,6 +160,19 @@
       },
       "x-go-package": "connect4solver"
     },
+    "MiniMaxiResponseBody": {
+      "type": "object",
+      "required": [
+        "BestMove"
+      ],
+      "properties": {
+        "BestMove": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "x-go-package": "connect4solver"
+    },
     "Player": {
       "type": "integer",
       "format": "int64",
@@ -165,6 +196,12 @@
       "description": "",
       "schema": {
         "$ref": "#/definitions/GetGridResponseBody"
+      }
+    },
+    "MiniMaxiResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/MiniMaxiResponseBody"
       }
     }
   }

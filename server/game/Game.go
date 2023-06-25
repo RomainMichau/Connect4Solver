@@ -1,6 +1,8 @@
 package game
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Cell int
 type Player int
@@ -12,16 +14,18 @@ const (
 )
 
 const (
-	YellowPlayer Player = 1
-	RedPlayer    Player = 2
+	YellowPlayer Player = 0
+	RedPlayer    Player = 1
 )
 
 //swagger:model Cell
 type Game struct {
-	Grid          [][]Cell
-	sizeW         int
-	sizeH         int
-	PlayerPlaying Player
+	Grid                 [][]Cell
+	sizeW                int
+	sizeH                int
+	PlayerPlaying        Player
+	LastAddedTokenLine   int
+	LastAddedTokenColumn int
 }
 
 func (g *Game) generateGrid() [][]Cell {
@@ -41,37 +45,51 @@ func Init(column int, line int) *Game {
 }
 
 func (g *Game) CanAddToken(col int) bool {
+	if col >= len(g.Grid[0]) || col < 0 {
+		return false
+	}
 	return g.Grid[0][col] == EmptyCell
 }
 
 // AddToken Add a token on the given col if possible, else return an error
 //
-// Return col and line of added token and type of added cell
-func (g *Game) AddToken(col int) (int, int, Cell, error) {
+// Return col and line of added token and the player who add the cell
+func (g *Game) AddToken(col int) (int, int, Cell, Player, error) {
+	player := g.PlayerPlaying
 	for i := len(g.Grid) - 1; i >= 0; i-- {
 		if g.Grid[i][col] == EmptyCell {
-			cell, _ := getCellForPlayer(g.PlayerPlaying)
+			cell, _ := getCellForPlayer(player)
 			g.Grid[i][col] = cell
-			g.nextPlayer()
-			return col, i, cell, nil
+			g.NextPlayer()
+			g.LastAddedTokenLine = i
+			g.LastAddedTokenColumn = col
+			return col, i, cell, player, nil
 		}
 	}
-	return -1, -1, -1, fmt.Errorf("no room on the line")
+	return -1, -1, -1, -1, fmt.Errorf("no room on the line")
 }
 
 func (g *Game) Reset() {
 	g.Grid = g.generateGrid()
 }
 
-func (g *Game) nextPlayer() {
+func (g *Game) NextPlayer() {
 	if g.PlayerPlaying == RedPlayer {
 		g.PlayerPlaying = YellowPlayer
 	} else {
 		g.PlayerPlaying = RedPlayer
 	}
-
 }
 
+func (g *Game) IsGridFull() bool {
+	full := true
+	for _, e := range g.Grid {
+		if e[len(e)-1] == EmptyCell {
+			full = false
+		}
+	}
+	return full
+}
 func (g *Game) CheckWin(line, col int) bool {
 	// Get the player's token at the given coordinates
 	grid := g.Grid

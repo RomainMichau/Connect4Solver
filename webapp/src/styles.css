@@ -1,1 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'ngx-toastr/toastr';
+
+
+.toast-red-win {
+  background-color: red !important;
+}
+
+.toast-yellow-win {
+  background-color: yellow !important;
+}
+
+.toast-center {
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}

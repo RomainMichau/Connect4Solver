@@ -1,19 +1,25 @@
 <div class="current-player">
   Current Player:
-  <div class="color-square" [ngStyle]="{ backgroundColor: getColor(currentPlayerColor) }"></div>
+  <div class="color-square" [ngStyle]="{ backgroundColor: currentPlayer.cellType.color }"></div>
 </div>
 
-<div class="game-mode">
-  <button (click)="toggleGameMode()">Toggle Game Mode</button>
-  <span *ngIf="yellowIsAi">Game Mode: AI</span>
-  <span *ngIf="!yellowIsAi">Game Mode: Human</span>
+<div class="game-mode" *ngFor="let player of players">
+  <button (click)="toggleGameMode(player.id)">Toggle Game Mode Player {{player.name}}</button>
+  <span *ngIf="player.isAi">Game Mode: AI</span>
+  <span *ngIf="!player.isAi">Game Mode: Human</span>
+</div>
+
+<button (click)="aiMove()">minimax</button>
+
+<div *ngIf="miniMaxBestMove != -1" class="current-player">
+  {{miniMaxBestMove}}
 </div>
 
 
 <div class="connect4-grid-container">
   <table class="connect4-grid">
     <tr *ngFor="let row of connect4Grid">
-      <td *ngFor="let cell of row" [ngClass]="getCellStyle(cell)" (click)="addToken(getColumnIndex($event.target))">
+      <td *ngFor="let cell of row" [ngClass]="cellTypes[cell].style" (click)="addToken(getColumnIndex($event.target))">
       </td>
     </tr>
   </table>

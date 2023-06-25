@@ -11,13 +11,7 @@
  */
 
 
-export interface AddTokenResponseBody { 
-    AddedCell: number;
-    Column: number;
-    CurrentPlayer: number;
-    IsGridFull: boolean;
-    Line: number;
-    NextPlayer: number;
-    PlayerWon: boolean;
+export interface MiniMaxiResponseBody { 
+    BestMove: number;
 }
 

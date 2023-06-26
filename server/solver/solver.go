@@ -16,7 +16,7 @@ const (
 	MaxDepth           = 2
 )
 
-func MiniMax(gameInstance *game.Game, depth int, maximizingPlayer bool) (int, int) {
+func MiniMax(gameInstance *game.Game, depth int, maximizingPlayer bool) (int, int, []int) {
 	size := len(gameInstance.Grid[0])
 	scores := make([]int, size)
 	for i := range scores {
@@ -32,7 +32,7 @@ func MiniMax(gameInstance *game.Game, depth int, maximizingPlayer bool) (int, in
 					scores[i] = Lost
 				}
 			} else if depth > 0 {
-				_, score := MiniMax(gameInstance, depth-1, !maximizingPlayer)
+				_, score, _ := MiniMax(gameInstance, depth-1, !maximizingPlayer)
 				scores[i] = score
 			} else {
 				scores[i] = Neutral
@@ -65,8 +65,5 @@ func MiniMax(gameInstance *game.Game, depth int, maximizingPlayer bool) (int, in
 	}
 	//fmt.Printf("Player: %t  %d\n", maximizingPlayer, miniMaxScore)
 
-	if moveId == -1 || miniMaxScore == -1 {
-		println("blk")
-	}
-	return moveId, miniMaxScore * (depth + 1)
+	return moveId, miniMaxScore, scores
 }

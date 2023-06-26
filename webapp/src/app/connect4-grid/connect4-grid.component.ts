@@ -12,12 +12,13 @@ import {ToastrService} from 'ngx-toastr';
 
 export class Connect4GridComponent implements OnInit {
   connect4Grid: number[][] = [];
+  columnScores: number[] = [];
   miniMaxBestMove: number = -1;
   cellTypes: CellType[] = [new CellType(0, "white", "cell-empty"),
     new CellType(1, '#ffd500', "cell-yellow"),
     new CellType(2, 'red', "cell-red")]
-  players: Player[] = [new Player(0, this.cellTypes[1], "yellow"),
-    new Player(1, this.cellTypes[2], 'red')]
+  players: Player[] = [new Player(0, this.cellTypes[1], "yellow", 2),
+    new Player(1, this.cellTypes[2], 'red', 2)]
   currentPlayer: Player = this.players[0];
 
   constructor(private service: GameService, private route: ActivatedRoute, private router: Router,
@@ -57,7 +58,7 @@ export class Connect4GridComponent implements OnInit {
       } else {
         this.currentPlayer = this.players[response.NextPlayer];
         if (this.currentPlayer.isAi) {
-          await this.delay(200)
+          // await this.delay(1000)
           this.aiMove()
         }
       }
@@ -68,6 +69,7 @@ export class Connect4GridComponent implements OnInit {
 
   aiMove() {
     this.service.minimax().subscribe(response => {
+      this.columnScores = response.Scores
       this.addToken(response.BestMove)
     })
   }
@@ -87,6 +89,7 @@ export class Connect4GridComponent implements OnInit {
   resetGrid(): void {
     this.service.resetGame().subscribe((response) => {
       this.service.getGrid().subscribe(data => {
+          this.columnScores = []
           this.connect4Grid = data.Grid;
           this.currentPlayer = this.players[data.CurrentPlayerColor];
         },
@@ -128,10 +131,12 @@ class Player {
     console.log(value)
     this._isAi = value;
   }
+
   get isAi(): boolean {
     return this._isAi;
   }
-  constructor(public id: number, public cellType: CellType, public name: string) {
+
+  constructor(public id: number, public cellType: CellType, public name: string, public depth: number) {
   }
 
   private _isAi: boolean = false

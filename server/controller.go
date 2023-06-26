@@ -109,7 +109,7 @@ func (c *Controller) resetHandler(w http.ResponseWriter, r *http.Request) {
 //	Responses:
 //	  200: MiniMaxiResponse
 func (c *Controller) miniMaxiHandler(w http.ResponseWriter, r *http.Request) {
-	bestMove, _ := solver.MiniMax(c.game, 7, true)
+	bestMove, _, scores := solver.MiniMax(c.game, 7, true)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(MiniMaxiResponseBody{BestMove: bestMove})
+	json.NewEncoder(w).Encode(MiniMaxiResponseBody{BestMove: bestMove, Scores: scores})
 }

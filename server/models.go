@@ -58,4 +58,6 @@ type MiniMaxiResponse struct {
 type MiniMaxiResponseBody struct {
 	// Required: true
 	BestMove int
+	// Required: true
+	Scores []int
 }

@@ -163,12 +163,20 @@
     "MiniMaxiResponseBody": {
       "type": "object",
       "required": [
-        "BestMove"
+        "BestMove",
+        "Scores"
       ],
       "properties": {
         "BestMove": {
           "type": "integer",
           "format": "int64"
+        },
+        "Scores": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
         }
       },
       "x-go-package": "connect4solver"

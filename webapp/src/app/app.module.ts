@@ -9,12 +9,14 @@ import {ApiModule, Configuration} from "../services";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
 import {FormsModule} from "@angular/forms";
+import { SwaggerUIComponent } from './swagger-ui/swagger-ui.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    Connect4GridComponent
+    Connect4GridComponent,
+    SwaggerUIComponent
   ],
   imports: [
     BrowserModule,

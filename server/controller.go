@@ -17,6 +17,7 @@ package main
 import (
 	"connect4solver/game"
 	"connect4solver/solver"
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/handlers"
@@ -26,6 +27,9 @@ import (
 	"os"
 	"strconv"
 )
+
+//go:embed specs/spec.json
+var openApiSpecs string
 
 type Controller struct {
 	game *game.Game
@@ -37,6 +41,7 @@ func InitController(game *game.Game, port int) {
 	spa := spaHandler{staticPath: "webapp/dist/connect4", indexPath: "index.html"}
 
 	r.HandleFunc("/api/grid", controller.getGrid).Methods("GET")
+	r.HandleFunc("/swagger.json", specHandler).Methods("GET")
 	r.HandleFunc("/api/token", controller.addTokenHandler).Methods("POST")
 	r.HandleFunc("/api/grid/reset", controller.resetHandler).Methods("POST")
 	r.HandleFunc("/api/solver/minimax", controller.miniMaxiHandler).Methods("GET")
@@ -44,6 +49,11 @@ func InitController(game *game.Game, port int) {
 	loggedRouter := handlers.LoggingHandler(os.Stdout, r)
 	log.Printf("starting server on port :%d\n", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", port), loggedRouter))
+}
+
+func specHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	fmt.Fprintf(w, openApiSpecs)
 }
 
 // swagger:route GET /api/grid game getGrid

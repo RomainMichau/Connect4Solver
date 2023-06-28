@@ -1,17 +1,24 @@
 <div class="top-right">
-  <div class="configuration">
+  <div class="configuration" style="border: 1px solid black;">
     <h3>Configuration</h3>
     <div *ngFor="let player of players">
       <label for="player.name">minimax Player depth {{player.name}} </label>
-      <select id="player.name" [(ngModel)]="player.depth">
-        <option value="2">2</option>
-        <option value="5">5</option>
-        <option value="7">7</option>
-      </select>
+      <input id="player.name" type="number" [ngModel]="player.depth" (ngModelChange)="updateDepth($event, player)"/>
     </div>
-    <!-- Add more variables and dropdown lists as needed -->
+    <div>
+      <label for="waitingtime">Waiting time after AI move</label>
+      <input id="waitingtime" type="number" [(ngModel)]="waitingTimeAfterAiMoveMs"/> ms
+    </div>
+  </div>
+  <div class="configuration" style="border: 1px solid black;">
+    <h3>History</h3>
+    <button (click)="clearHistory()">clear</button>
+    <div *ngFor="let histo of history; let i = index">
+      {{i + 1}}: {{histo.gameResult}} {{histo.playerName}}
+    </div>
   </div>
 </div>
+
 
 <div class="current-player">
   Current Player:
@@ -26,22 +33,24 @@
 
 <button (click)="aiMove()">minimax</button>
 
-<div *ngIf="miniMaxBestMove != -1" class="current-player">
-  {{miniMaxBestMove}}
+<div *ngIf="isWaitingAiResponse" class="spinner-container">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
 </div>
-
 
 <div class="connect4-grid-container">
   <table class="connect4-grid">
     <tr>
-      <td *ngFor="let score of columnScores" class="column-number">
+      <td *ngFor="let score of columnScores; let i = index" class="column-number" [ngClass]="{ 'bold-score': i === lastAiMove }">
         {{score}}
       </td>
     </tr>
     <tr *ngFor="let row of connect4Grid">
-      <td *ngFor="let cell of row" [ngClass]="cellTypes[cell].style" (click)="addToken(getColumnIndex($event.target))">
+      <td *ngFor="let cell of row" [ngClass]="cellTypes[cell].style" (click)="humanMove(getColumnIndex($event.target))">
       </td>
     </tr>
   </table>
-  <button (click)="resetGrid()">Reset</button>
+  <button (click)="resetGrid()">Restart game</button>
 </div>
+

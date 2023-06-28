@@ -104,12 +104,29 @@ func (c *Controller) resetHandler(w http.ResponseWriter, r *http.Request) {
 	c.game.Reset()
 }
 
-// swagger:route POST /api/solver/minimax game minimax
+// swagger:route GET /api/solver/minimax game minimax
 //
-//	Responses:
-//	  200: MiniMaxiResponse
+//	Parameters:
+//	  + name: depth
+//	    in: query
+//	    description: depth of the minimax
+//	    required: true
+//	    type: integer
+//
+// Responses:
+//
+//	200: MiniMaxiResponse
 func (c *Controller) miniMaxiHandler(w http.ResponseWriter, r *http.Request) {
-	bestMove, _, scores := solver.MiniMax(c.game, 7, true)
+	depthSt := r.URL.Query().Get("depth")
+	if depthSt == "" {
+		http.Error(w, "Missing 'depth' parameter", http.StatusBadRequest)
+		return
+	}
+	depth, err := strconv.Atoi(depthSt)
+	if err != nil {
+		http.Error(w, "Cannot parse colum to int", http.StatusInternalServerError)
+	}
+	bestMove, _, scores := solver.MiniMax(c.game, depth, true)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(MiniMaxiResponseBody{BestMove: bestMove, Scores: scores})
 }

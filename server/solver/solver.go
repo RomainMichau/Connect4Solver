@@ -2,6 +2,7 @@ package solver
 
 import (
 	"connect4solver/game"
+	"math/rand"
 )
 
 // 0 lose
@@ -13,7 +14,6 @@ const (
 	Lost           int = 0
 	Neutral        int = 1
 	Win            int = 2
-	MaxDepth           = 2
 )
 
 func MiniMax(gameInstance *game.Game, depth int, maximizingPlayer bool) (int, int, []int) {
@@ -45,25 +45,34 @@ func MiniMax(gameInstance *game.Game, depth int, maximizingPlayer bool) (int, in
 	}
 	//fmt.Printf("Player: %t  %v\n", maximizingPlayer, scores)
 	var miniMaxScore int
-	moveId := -1
+	var bestMoveIds []int
 	if maximizingPlayer {
 		miniMaxScore = -1
 		for i, e := range scores {
 			if e > miniMaxScore && e != ImpossibleMove {
-				moveId = i
+				bestMoveIds = []int{i}
 				miniMaxScore = e
+			} else if e == miniMaxScore && e != ImpossibleMove {
+				bestMoveIds = append(bestMoveIds, i)
 			}
 		}
 	} else {
 		miniMaxScore = 10000
 		for i, e := range scores {
 			if e < miniMaxScore && e != ImpossibleMove {
-				moveId = i
+				bestMoveIds = []int{i}
 				miniMaxScore = e
+			} else if e == miniMaxScore && e != ImpossibleMove {
+				bestMoveIds = append(bestMoveIds, i)
 			}
 		}
 	}
 	//fmt.Printf("Player: %t  %d\n", maximizingPlayer, miniMaxScore)
-
-	return moveId, miniMaxScore, scores
+	var bestMoveId int
+	if len(bestMoveIds) == 0 {
+		bestMoveId = -1
+	} else {
+		bestMoveId = bestMoveIds[rand.Intn(len(bestMoveIds))]
+	}
+	return bestMoveId, miniMaxScore, scores
 }

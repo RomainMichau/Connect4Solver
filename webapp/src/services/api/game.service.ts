@@ -152,13 +152,23 @@ export class GameService {
     }
 
     /**
+     * @param depth depth of the minimax
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public minimax(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<MiniMaxiResponseBody>;
-    public minimax(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<MiniMaxiResponseBody>>;
-    public minimax(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<MiniMaxiResponseBody>>;
-    public minimax(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public minimax(depth: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<MiniMaxiResponseBody>;
+    public minimax(depth: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<MiniMaxiResponseBody>>;
+    public minimax(depth: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<MiniMaxiResponseBody>>;
+    public minimax(depth: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        if (depth === null || depth === undefined) {
+            throw new Error('Required parameter depth was null or undefined when calling minimax.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (depth !== undefined && depth !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>depth, 'depth');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -192,9 +202,10 @@ export class GameService {
         }
 
         let localVarPath = `/api/solver/minimax`;
-        return this.httpClient.request<MiniMaxiResponseBody>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<MiniMaxiResponseBody>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

@@ -44,11 +44,20 @@
       }
     },
     "/api/solver/minimax": {
-      "post": {
+      "get": {
         "tags": [
           "game"
         ],
         "operationId": "minimax",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "depth of the minimax",
+            "name": "depth",
+            "in": "query",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/responses/MiniMaxiResponse"

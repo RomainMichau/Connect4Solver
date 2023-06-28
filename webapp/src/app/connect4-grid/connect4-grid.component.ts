@@ -11,15 +11,19 @@ import {ToastrService} from 'ngx-toastr';
 
 
 export class Connect4GridComponent implements OnInit {
+  defaultDepth = 6
+  waitingTimeAfterAiMoveMs = 0
   connect4Grid: number[][] = [];
+  lastAiMove: number = -1;
+  history: GameHistory[] = []
   columnScores: number[] = [];
-  miniMaxBestMove: number = -1;
   cellTypes: CellType[] = [new CellType(0, "white", "cell-empty"),
     new CellType(1, '#ffd500', "cell-yellow"),
     new CellType(2, 'red', "cell-red")]
-  players: Player[] = [new Player(0, this.cellTypes[1], "yellow", 2),
-    new Player(1, this.cellTypes[2], 'red', 2)]
+  players: Player[] = [new Player(0, this.cellTypes[1], "yellow", this.defaultDepth),
+    new Player(1, this.cellTypes[2], 'red', this.defaultDepth)]
   currentPlayer: Player = this.players[0];
+  isWaitingAiResponse = false
 
   constructor(private service: GameService, private route: ActivatedRoute, private router: Router,
               private toastr: ToastrService) {
@@ -36,12 +40,44 @@ export class Connect4GridComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
       this.players[1].isAi = params['redIsAi'] == 'true';
+      this.players[1].depth = params['redDepth']
+      this.players[1].depth ??= this.defaultDepth
       this.players[0].isAi = params['yellowIsAi'] == 'true';
+      this.players[0].depth = params['yellowDepth']
+      this.players[0].depth ??= this.defaultDepth
     });
+
+    const savedHistory = localStorage.getItem('connect4History');
+    if (savedHistory) {
+      this.history = JSON.parse(savedHistory);
+    }
+
+  }
+
+  humanMove(column: number): void {
+    if (this.isWaitingAiResponse) {
+      return
+    }
+    this.columnScores = []
+    this.addToken(column)
   }
 
 
-  addToken(column: number): void {
+  aiMove() {
+    if (this.isWaitingAiResponse) {
+      return
+    }
+    this.isWaitingAiResponse = true
+    this.service.minimax(this.currentPlayer.depth).subscribe(response => {
+      this.columnScores = response.Scores
+      this.addToken(response.BestMove)
+      this.lastAiMove = response.BestMove
+      this.isWaitingAiResponse = false
+    })
+  }
+
+  private addToken(column: number): void {
+
     this.service.postToken(column).subscribe(async response => {
       // Update the grid with the new token
       this.connect4Grid[response.Line][response.Column] = response.AddedCell;
@@ -51,14 +87,17 @@ export class Connect4GridComponent implements OnInit {
           toastClass: 'toast-' + this.currentPlayer.name + '-win',
           positionClass: 'toast-center'
         });
+        this.addToHistory(new GameHistory(this.currentPlayer.name, "Victory"))
       } else if (response.IsGridFull) {
         this.toastr.success("Draw", 'Draw', {
           positionClass: 'toast-center'
         });
+        this.addToHistory(new GameHistory("None", "Draw"))
       } else {
         this.currentPlayer = this.players[response.NextPlayer];
         if (this.currentPlayer.isAi) {
-          // await this.delay(1000)
+          if (this.waitingTimeAfterAiMoveMs > 0)
+            await this.delay(this.waitingTimeAfterAiMoveMs)
           this.aiMove()
         }
       }
@@ -66,20 +105,6 @@ export class Connect4GridComponent implements OnInit {
       alert(error.error.Reason)
     });
   }
-
-  aiMove() {
-    this.service.minimax().subscribe(response => {
-      this.columnScores = response.Scores
-      this.addToken(response.BestMove)
-    })
-  }
-
-  minimax() {
-    this.service.minimax().subscribe(response => {
-      this.miniMaxBestMove = response.BestMove
-    })
-  }
-
 
   getColumnIndex(target: EventTarget | null): number {
     const cell = target as HTMLTableCellElement;
@@ -92,11 +117,19 @@ export class Connect4GridComponent implements OnInit {
           this.columnScores = []
           this.connect4Grid = data.Grid;
           this.currentPlayer = this.players[data.CurrentPlayerColor];
+          if (this.currentPlayer.isAi) {
+            this.aiMove()
+          }
         },
         error => {
           console.error('Failed to fetch Connect 4 grid data', error);
         })
     });
+  }
+
+  clearHistory(): void {
+    this.history = []
+    localStorage.setItem('connect4History', JSON.stringify(this.history));
   }
 
   toggleGameMode(playerId: number): void {
@@ -113,12 +146,45 @@ export class Connect4GridComponent implements OnInit {
       relativeTo: this.route,
       queryParams: queryParams
     });
+    if (this.currentPlayer.isAi) {
+      this.aiMove()
+    }
   }
 
-  delay(ms: number) {
+  updateDepth(newDepth: number, player: Player): void {
+    if(newDepth == null) {
+      return
+    }
+    player.depth = newDepth;
+
+    const queryParams: Params = {
+      yellowIsAi: this.players[0].isAi,
+      redIsAi: this.players[1].isAi,
+      yellowDepth: this.players[0].depth,
+      redDepth: this.players[1].depth
+    };
+
+    // Navigate to the updated URL with the new query parameters
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams
+    });
+  }
+
+  private delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  private addToHistory(historyElem: GameHistory): void {
+    // Save the history to local storage
+    this.history.push(historyElem)
+    localStorage.setItem('connect4History', JSON.stringify(this.history));
+  }
+}
+
+class GameHistory {
+  constructor(public playerName: string, public gameResult: string) {
+  }
 }
 
 class CellType {

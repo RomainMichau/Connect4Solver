@@ -83,8 +83,8 @@ func (g *Game) NextPlayer() {
 
 func (g *Game) IsGridFull() bool {
 	full := true
-	for _, e := range g.Grid {
-		if e[len(e)-1] == EmptyCell {
+	for _, e := range g.Grid[0] {
+		if e == EmptyCell {
 			full = false
 		}
 	}

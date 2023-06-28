@@ -44,3 +44,16 @@
   padding: 10px;
 }
 
+.spinner-border {
+  color: #6c757d;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.bold-score {
+  color: orange;
+  font-weight: bold;
+}
+
+/* Adjust spinner color and size as needed */

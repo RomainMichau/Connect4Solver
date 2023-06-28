@@ -18,9 +18,12 @@ import (
 	"connect4solver/game"
 	"connect4solver/solver"
 	"encoding/json"
+	"fmt"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 )
 
@@ -28,15 +31,19 @@ type Controller struct {
 	game *game.Game
 }
 
-func InitController(game *game.Game) {
+func InitController(game *game.Game, port int) {
 	controller := Controller{game: game}
 	r := mux.NewRouter()
-	r.HandleFunc("/api/grid", controller.getGrid)
-	r.HandleFunc("/api/token", controller.addTokenHandler)
-	r.HandleFunc("/api/grid/reset", controller.resetHandler)
-	r.HandleFunc("/api/solver/minimax", controller.miniMaxiHandler)
-	log.Println("starting server")
-	log.Fatal(http.ListenAndServe(":8081", r))
+	spa := spaHandler{staticPath: "webapp/dist/connect4", indexPath: "index.html"}
+
+	r.HandleFunc("/api/grid", controller.getGrid).Methods("GET")
+	r.HandleFunc("/api/token", controller.addTokenHandler).Methods("POST")
+	r.HandleFunc("/api/grid/reset", controller.resetHandler).Methods("POST")
+	r.HandleFunc("/api/solver/minimax", controller.miniMaxiHandler).Methods("GET")
+	r.PathPrefix("/").Handler(spa)
+	loggedRouter := handlers.LoggingHandler(os.Stdout, r)
+	log.Printf("starting server on port :%d\n", port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", port), loggedRouter))
 }
 
 // swagger:route GET /api/grid game getGrid

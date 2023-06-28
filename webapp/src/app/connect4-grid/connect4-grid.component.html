@@ -1,3 +1,8 @@
+<h1>Connect4
+  <a href="https://github.com/RomainMichau/Connect4Solver" target="_blank">
+    <i class="fa fa-github" style="font-size:48px"></i>
+  </a>
+</h1>
 <div class="top-right">
   <div class="configuration" style="border: 1px solid black;">
     <h3>Configuration</h3>
@@ -11,7 +16,7 @@
     </div>
   </div>
   <div class="configuration" style="border: 1px solid black;">
-    <h3>History</h3>
+    <h3>Games History</h3>
     <button (click)="clearHistory()">clear</button>
     <div *ngFor="let histo of history; let i = index">
       {{i + 1}}: {{histo.gameResult}} {{histo.playerName}}
@@ -31,7 +36,7 @@
   <span *ngIf="!player.isAi">Game Mode: Human</span>
 </div>
 
-<button (click)="aiMove()">minimax</button>
+<button (click)="aiMove()">Do 1 minimax move</button>
 
 <div *ngIf="isWaitingAiResponse" class="spinner-container">
   <div class="spinner-border" role="status">
@@ -42,7 +47,8 @@
 <div class="connect4-grid-container">
   <table class="connect4-grid">
     <tr>
-      <td *ngFor="let score of columnScores; let i = index" class="column-number" [ngClass]="{ 'bold-score': i === lastAiMove }">
+      <td *ngFor="let score of columnScores; let i = index" class="column-number"
+          [ngClass]="{ 'bold-score': i === lastAiMove }">
         {{score}}
       </td>
     </tr>

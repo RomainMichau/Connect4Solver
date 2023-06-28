@@ -46,6 +46,9 @@ export class Connect4GridComponent implements OnInit {
       this.players[0].depth = params['yellowDepth']
       this.players[0].depth ??= this.defaultDepth
     });
+    if (this.currentPlayer.isAi) {
+      this.aiMove()
+    }
 
     const savedHistory = localStorage.getItem('connect4History');
     if (savedHistory) {
@@ -58,7 +61,6 @@ export class Connect4GridComponent implements OnInit {
     if (this.isWaitingAiResponse) {
       return
     }
-    this.columnScores = []
     this.addToken(column)
   }
 
@@ -152,7 +154,7 @@ export class Connect4GridComponent implements OnInit {
   }
 
   updateDepth(newDepth: number, player: Player): void {
-    if(newDepth == null) {
+    if (newDepth == null) {
       return
     }
     player.depth = newDepth;

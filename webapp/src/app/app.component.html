@@ -1,9 +1,16 @@
-<h1>Connect4
+<mat-toolbar>
+  <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="menu" (click)="drawer.toggle()"></mat-icon>
+
+  <span>Connect4</span> <a href="https://github.com/RomainMichau/Connect4Solver" target="_blank">
   <a href="https://github.com/RomainMichau/Connect4Solver" target="_blank">
-    <i class="fa fa-github" style="font-size:48px"></i>
+    <mat-icon class="fa" color="primary" fontSet="fa" fontIcon="fa-github"></mat-icon>
   </a>
-</h1>
-<mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="menu" (click)="drawer.toggle()"></mat-icon>
+</a>
+</mat-toolbar>
+<div class="mat-app-background">
+
+</div>
+
 <mat-drawer-container class="example-container" autosize>
   <mat-drawer #drawer class="example-sidenav" mode="side" opened="true">
     <div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="20px" class="with-nav-margin">

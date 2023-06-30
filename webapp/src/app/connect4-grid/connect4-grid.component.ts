@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {GameService} from "../../services";
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {ToastrService} from 'ngx-toastr';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-connect4-grid',
@@ -26,7 +26,7 @@ export class Connect4GridComponent implements OnInit {
   isWaitingAiResponse = false
 
   constructor(private service: GameService, private route: ActivatedRoute, private router: Router,
-              private toastr: ToastrService) {
+              private _snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -78,6 +78,7 @@ export class Connect4GridComponent implements OnInit {
     })
   }
 
+
   private addToken(column: number): void {
 
     this.service.postToken(column).subscribe(async response => {
@@ -85,15 +86,10 @@ export class Connect4GridComponent implements OnInit {
       this.connect4Grid[response.Line][response.Column] = response.AddedCell;
       if (response.PlayerWon) {
         const message = `Player ${this.currentPlayer.name.toUpperCase()} wins!`;
-        this.toastr.success(message, `Player ${this.currentPlayer.name} win`, {
-          toastClass: 'toast-' + this.currentPlayer.name + '-win',
-          positionClass: 'toast-center'
-        });
+        this.openSnackBar(message)
         this.addToHistory(new GameHistory(this.currentPlayer.name, "Victory"))
       } else if (response.IsGridFull) {
-        this.toastr.success("Draw", 'Draw', {
-          positionClass: 'toast-center'
-        });
+        this.openSnackBar("Draw")
         this.addToHistory(new GameHistory("None", "Draw"))
       } else {
         this.currentPlayer = this.players[response.NextPlayer];
@@ -170,6 +166,14 @@ export class Connect4GridComponent implements OnInit {
       relativeTo: this.route,
       queryParams: queryParams
     });
+  }
+
+  private openSnackBar(message: string) {
+    const config = {
+      duration: 10000,
+      panelClass: ['mat-toolbar', 'mat-primary']
+    }
+    this._snackBar.open(message, "Close", config)
   }
 
   private delay(ms: number) {

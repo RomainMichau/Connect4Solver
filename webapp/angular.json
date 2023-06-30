@@ -25,9 +25,10 @@
               "src/assets"
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "@angular/material/prebuilt-themes/purple-green.css",
               "src/styles.css",
-              "node_modules/swagger-ui-dist/swagger-ui.css"
+              "node_modules/swagger-ui-dist/swagger-ui.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
             ],
             "scripts": [
               "node_modules/swagger-ui-dist/swagger-ui-bundle.js",
@@ -92,7 +93,7 @@
               "src/assets"
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "@angular/material/prebuilt-themes/purple-green.css",
               "src/styles.css"
             ],
             "scripts": []

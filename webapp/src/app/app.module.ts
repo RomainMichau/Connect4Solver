@@ -18,6 +18,8 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatSliderModule} from "@angular/material/slider";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatTableModule} from "@angular/material/table";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatToolbarModule} from "@angular/material/toolbar";
 
 @NgModule({
   declarations: [
@@ -36,14 +38,15 @@ import {MatTableModule} from "@angular/material/table";
     RouterModule,
     MatButtonModule,
     MatSlideToggleModule,
+    MatSnackBarModule,
     MatTableModule,
+    MatToolbarModule,
     ApiModule.forRoot(() => {
       return new Configuration({
         basePath: ``,
       })
     }),
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
   ],
   exports: [MatSlideToggleModule],
   providers: [],

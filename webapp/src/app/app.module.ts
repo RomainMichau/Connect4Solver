@@ -20,6 +20,7 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatTableModule} from "@angular/material/table";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import {MatToolbarModule} from "@angular/material/toolbar";
     MatSnackBarModule,
     MatTableModule,
     MatToolbarModule,
+    MatInputModule,
     ApiModule.forRoot(() => {
       return new Configuration({
         basePath: ``,
@@ -48,7 +50,7 @@ import {MatToolbarModule} from "@angular/material/toolbar";
     }),
     BrowserAnimationsModule,
   ],
-  exports: [MatSlideToggleModule],
+  exports: [MatSlideToggleModule, MatInputModule],
   providers: [],
   bootstrap: [AppComponent]
 })

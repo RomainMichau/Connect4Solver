@@ -1,18 +1,26 @@
 <div class="top-right">
   <div class="configuration" style="border: 1px solid black;">
     <h3>Configuration</h3>
-    <div *ngFor="let player of players">
-      <label for="player.name">minimax Player depth {{player.name}} </label>
-      <input id="player.name" type="number" [ngModel]="player.depth" (ngModelChange)="updateDepth($event, player)"/>
-    </div>
+    <mat-form-field>
+      <span *ngFor="let player of players">
+        <mat-label>minimax Player depth {{player.name}} </mat-label>
+        <input id="player.name" matInput type="number" [ngModel]="player.depth"
+               (ngModelChange)="updateDepth($event, player)"/>
+      </span>
+
+
+    </mat-form-field>
+    <mat-form-field>
+
+      <mat-label>Waiting time after AI move</mat-label>
+      <input matInput type="number" [(ngModel)]="waitingTimeAfterAiMoveMs"/> ms
+    </mat-form-field>
     <div>
-      <label for="waitingtime">Waiting time after AI move</label>
-      <input id="waitingtime" type="number" [(ngModel)]="waitingTimeAfterAiMoveMs"/> ms
     </div>
   </div>
   <div class="configuration" style="border: 1px solid black;">
     <h3>Games History</h3>
-    <button (click)="clearHistory()">clear</button>
+    <button (click)="clearHistory()" mat-raised-button color="primary">clear</button>
     <div *ngFor="let histo of history; let i = index">
       {{i + 1}}: {{histo.gameResult}} {{histo.playerName}}
     </div>
@@ -57,6 +65,6 @@
       </td>
     </tr>
   </table>
-  <button (click)="resetGrid()">Restart game</button>
+  <button (click)="resetGrid()" mat-raised-button color="warn">Restart game</button>
 </div>
 

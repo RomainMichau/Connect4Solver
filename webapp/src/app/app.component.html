@@ -3,9 +3,21 @@
     <i class="fa fa-github" style="font-size:48px"></i>
   </a>
 </h1>
-<ul>
-  <li><a routerLink="/">Game</a></li>
-  <li><a routerLink="/swagger">Swagger Documentation</a></li>
-</ul>
-
-<router-outlet></router-outlet>
+<mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="menu" (click)="drawer.toggle()"></mat-icon>
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav" mode="side" opened="true">
+    <div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="20px" class="with-nav-margin">
+      <a
+        mat-raised-button
+        color="primary"
+        [routerLink]="['/']"
+      >Game</a>
+      <a
+        mat-raised-button
+        color="primary"
+        [routerLink]="['swagger']"
+      >Swagger</a>
+    </div>
+  </mat-drawer>
+  <router-outlet></router-outlet>
+</mat-drawer-container>

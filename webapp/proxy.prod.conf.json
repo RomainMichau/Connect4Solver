@@ -1,0 +1,12 @@
+{
+  "/api": {
+    "target": "https://connect4.romainmic.com/",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/swagger.json": {
+    "target": "https://connect4.romainmic.com/",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

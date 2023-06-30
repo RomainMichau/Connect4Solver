@@ -9,20 +9,34 @@ import {ApiModule, Configuration} from "../services";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
 import {FormsModule} from "@angular/forms";
-import { SwaggerUIComponent } from './swagger-ui/swagger-ui.component';
-
+import {SwaggerUIComponent} from './swagger-ui/swagger-ui.component';
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatIconModule} from "@angular/material/icon";
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {RouterModule} from "@angular/router";
+import {MatButtonModule} from "@angular/material/button";
+import {MatSliderModule} from "@angular/material/slider";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {MatTableModule} from "@angular/material/table";
 
 @NgModule({
   declarations: [
     AppComponent,
     Connect4GridComponent,
-    SwaggerUIComponent
+    SwaggerUIComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    MatSidenavModule,
+    MatIconModule,
+    FlexLayoutModule,
+    RouterModule,
+    MatButtonModule,
+    MatSlideToggleModule,
+    MatTableModule,
     ApiModule.forRoot(() => {
       return new Configuration({
         basePath: ``,
@@ -31,6 +45,7 @@ import { SwaggerUIComponent } from './swagger-ui/swagger-ui.component';
     BrowserAnimationsModule,
     ToastrModule.forRoot()
   ],
+  exports: [MatSlideToggleModule],
   providers: [],
   bootstrap: [AppComponent]
 })

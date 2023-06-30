@@ -141,7 +141,6 @@ export class Connect4GridComponent implements OnInit {
       redIsAi: this.players[1].isAi
     };
 
-    console.log(this.players[playerId].isAi)
 
     // Navigate to the updated URL with the new query parameters
     this.router.navigate([], {

@@ -26,12 +26,16 @@
 </div>
 
 <div class="game-mode" *ngFor="let player of players">
-  <button (click)="toggleGameMode(player.id)">Toggle Game Mode Player {{player.name}}</button>
-  <span *ngIf="player.isAi">Game Mode: AI</span>
-  <span *ngIf="!player.isAi">Game Mode: Human</span>
+  <mat-slide-toggle
+    [checked]="player.isAi"
+    (change)="toggleGameMode(player.id)">
+    {{player.name}} AI mode
+  </mat-slide-toggle>
 </div>
 
-<button (click)="aiMove()">Do 1 minimax move</button>
+<div class=mat-raised-button>
+  <button (click)="aiMove()" mat-raised-button color="accent">Do 1 minimax move</button>
+</div>
 
 <div *ngIf="isWaitingAiResponse" class="spinner-container">
   <div class="spinner-border" role="status">
@@ -48,7 +52,8 @@
       </td>
     </tr>
     <tr *ngFor="let row of connect4Grid">
-      <td *ngFor="let cell of row" [ngClass]="cellTypes[cell].style" (click)="humanMove(getColumnIndex($event.target))">
+      <td *ngFor="let cell of row" [ngClass]="cellTypes[cell].style"
+          (click)="humanMove(getColumnIndex($event.target))">
       </td>
     </tr>
   </table>

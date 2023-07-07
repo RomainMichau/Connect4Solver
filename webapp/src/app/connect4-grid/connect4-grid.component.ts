@@ -133,6 +133,8 @@ export class Connect4GridComponent implements OnInit {
   toggleGameMode(playerId: number): void {
     this.players[playerId].isAi = !this.players[playerId].isAi
     const queryParams: Params = {
+      yellowDepth: this.players[0].depth,
+      redDepth: this.players[1].depth,
       yellowIsAi: this.players[0].isAi,
       redIsAi: this.players[1].isAi
     };

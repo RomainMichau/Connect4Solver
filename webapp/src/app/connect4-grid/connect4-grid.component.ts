@@ -201,7 +201,6 @@ class CellType {
 
 class Player {
   set isAi(value: boolean) {
-    console.log(value)
     this._isAi = value;
   }
 

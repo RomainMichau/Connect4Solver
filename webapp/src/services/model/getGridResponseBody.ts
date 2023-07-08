@@ -12,7 +12,7 @@
 
 
 export interface GetGridResponseBody { 
-    CurrentPlayerColor: number;
-    Grid: Array<Array<number>>;
+    current_player_color: number;
+    grid: Array<Array<number>>;
 }
 

@@ -95,37 +95,41 @@
     "AddTokenResponseBody": {
       "type": "object",
       "required": [
-        "Line",
-        "Column",
-        "AddedCell",
-        "NextPlayer",
-        "PlayerWon",
-        "IsGridFull",
-        "CurrentPlayer"
+        "line",
+        "column",
+        "added_cell",
+        "next_player",
+        "player_won",
+        "is_grid_full",
+        "current_player"
       ],
       "properties": {
-        "AddedCell": {
+        "added_cell": {
           "$ref": "#/definitions/Cell"
         },
-        "Column": {
+        "column": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "x-go-name": "Column"
         },
-        "CurrentPlayer": {
+        "current_player": {
           "$ref": "#/definitions/Player"
         },
-        "IsGridFull": {
-          "type": "boolean"
+        "is_grid_full": {
+          "type": "boolean",
+          "x-go-name": "IsGridFull"
         },
-        "Line": {
+        "line": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "x-go-name": "Line"
         },
-        "NextPlayer": {
+        "next_player": {
           "$ref": "#/definitions/Player"
         },
-        "PlayerWon": {
-          "type": "boolean"
+        "player_won": {
+          "type": "boolean",
+          "x-go-name": "PlayerWon"
         }
       },
       "x-go-package": "connect4solver"
@@ -133,11 +137,12 @@
     "BadRequestErrorBody": {
       "type": "object",
       "required": [
-        "Reason"
+        "reason"
       ],
       "properties": {
-        "Reason": {
-          "type": "string"
+        "reason": {
+          "type": "string",
+          "x-go-name": "Reason"
         }
       },
       "x-go-package": "connect4solver"
@@ -150,21 +155,22 @@
     "GetGridResponseBody": {
       "type": "object",
       "required": [
-        "Grid",
-        "CurrentPlayerColor"
+        "grid",
+        "current_player_color"
       ],
       "properties": {
-        "CurrentPlayerColor": {
+        "current_player_color": {
           "$ref": "#/definitions/Player"
         },
-        "Grid": {
+        "grid": {
           "type": "array",
           "items": {
             "type": "array",
             "items": {
               "$ref": "#/definitions/Cell"
             }
-          }
+          },
+          "x-go-name": "Grid"
         }
       },
       "x-go-package": "connect4solver"
@@ -172,20 +178,22 @@
     "MiniMaxiResponseBody": {
       "type": "object",
       "required": [
-        "BestMove",
-        "Scores"
+        "best_move",
+        "scores"
       ],
       "properties": {
-        "BestMove": {
+        "best_move": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "x-go-name": "BestMove"
         },
-        "Scores": {
+        "scores": {
           "type": "array",
           "items": {
             "type": "integer",
             "format": "int64"
-          }
+          },
+          "x-go-name": "Scores"
         }
       },
       "x-go-package": "connect4solver"

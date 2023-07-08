@@ -12,12 +12,12 @@
 
 
 export interface AddTokenResponseBody { 
-    AddedCell: number;
-    Column: number;
-    CurrentPlayer: number;
-    IsGridFull: boolean;
-    Line: number;
-    NextPlayer: number;
-    PlayerWon: boolean;
+    added_cell: number;
+    column: number;
+    current_player: number;
+    is_grid_full: boolean;
+    line: number;
+    next_player: number;
+    player_won: boolean;
 }
 

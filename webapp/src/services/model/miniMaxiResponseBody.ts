@@ -12,7 +12,7 @@
 
 
 export interface MiniMaxiResponseBody { 
-    BestMove: number;
-    Scores: Array<number>;
+    best_move: number;
+    scores: Array<number>;
 }
 

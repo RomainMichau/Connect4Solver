@@ -12,6 +12,6 @@
 
 
 export interface BadRequestErrorBody { 
-    Reason: string;
+    reason: string;
 }
 

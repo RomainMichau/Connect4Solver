@@ -31,8 +31,8 @@ export class Connect4GridComponent implements OnInit {
 
   ngOnInit(): void {
     this.service.getGrid().subscribe(data => {
-        this.connect4Grid = data.Grid;
-        this.currentPlayer = this.players[data.CurrentPlayerColor];
+        this.connect4Grid = data.grid;
+        this.currentPlayer = this.players[data.current_player_color];
       },
       error => {
         console.error('Failed to fetch Connect 4 grid data', error);
@@ -71,9 +71,9 @@ export class Connect4GridComponent implements OnInit {
     }
     this.isWaitingAiResponse = true
     this.service.minimax(this.currentPlayer.depth).subscribe(response => {
-      this.columnScores = response.Scores
-      this.addToken(response.BestMove)
-      this.lastAiMove = response.BestMove
+      this.columnScores = response.scores
+      this.addToken(response.best_move)
+      this.lastAiMove = response.best_move
       this.isWaitingAiResponse = false
     })
   }
@@ -83,16 +83,16 @@ export class Connect4GridComponent implements OnInit {
 
     this.service.postToken(column).subscribe(async response => {
       // Update the grid with the new token
-      this.connect4Grid[response.Line][response.Column] = response.AddedCell;
-      if (response.PlayerWon) {
+      this.connect4Grid[response.line][response.column] = response.added_cell;
+      if (response.player_won) {
         const message = `Player ${this.currentPlayer.name.toUpperCase()} wins!`;
         this.openSnackBar(message)
         this.addToHistory(new GameHistory(this.currentPlayer.name, "Victory"))
-      } else if (response.IsGridFull) {
+      } else if (response.is_grid_full) {
         this.openSnackBar("Draw")
         this.addToHistory(new GameHistory("None", "Draw"))
       } else {
-        this.currentPlayer = this.players[response.NextPlayer];
+        this.currentPlayer = this.players[response.next_player];
         if (this.currentPlayer.isAi) {
           if (this.waitingTimeAfterAiMoveMs > 0)
             await this.delay(this.waitingTimeAfterAiMoveMs)
@@ -113,8 +113,8 @@ export class Connect4GridComponent implements OnInit {
     this.service.resetGame().subscribe((response) => {
       this.service.getGrid().subscribe(data => {
           this.columnScores = []
-          this.connect4Grid = data.Grid;
-          this.currentPlayer = this.players[data.CurrentPlayerColor];
+          this.connect4Grid = data.grid;
+          this.currentPlayer = this.players[data.current_player_color];
           if (this.currentPlayer.isAi) {
             this.aiMove()
           }

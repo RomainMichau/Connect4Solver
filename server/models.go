@@ -1,6 +1,9 @@
 package main
 
-import "connect4solver/game"
+import (
+	"connect4solver/game"
+	_ "encoding/json"
+)
 
 // swagger:response AddTokenResponse
 type AddTokenResponse struct {
@@ -10,19 +13,19 @@ type AddTokenResponse struct {
 
 type AddTokenResponseBody struct {
 	// Required: true
-	Line int
+	Line int `json:"line"`
 	// Required: true
-	Column int
+	Column int `json:"column"`
 	// Required: true
-	AddedCell game.Cell
+	AddedCell game.Cell `json:"added_cell"`
 	// Required: true
-	NextPlayer game.Player
+	NextPlayer game.Player `json:"next_player"`
 	// Required: true
-	PlayerWon bool
+	PlayerWon bool `json:"player_won"`
 	// Required: true
-	IsGridFull bool
+	IsGridFull bool `json:"is_grid_full"`
 	// Required: true
-	CurrentPlayer game.Player
+	CurrentPlayer game.Player `json:"current_player"`
 }
 
 // swagger:response BadRequestError
@@ -33,7 +36,7 @@ type BadRequestError struct {
 
 type BadRequestErrorBody struct {
 	// Required: true
-	Reason string
+	Reason string `json:"reason"`
 }
 
 // swagger:response GetGridResponse
@@ -44,9 +47,9 @@ type GetGridResponse struct {
 
 type GetGridResponseBody struct {
 	// Required: true
-	Grid [][]game.Cell
+	Grid [][]game.Cell `json:"grid"`
 	// Required: true
-	CurrentPlayerColor game.Player
+	CurrentPlayerColor game.Player `json:"current_player_color"`
 }
 
 // swagger:response MiniMaxiResponse
@@ -57,7 +60,7 @@ type MiniMaxiResponse struct {
 
 type MiniMaxiResponseBody struct {
 	// Required: true
-	BestMove int
+	BestMove int `json:"best_move"`
 	// Required: true
-	Scores []int
+	Scores []int `json:"scores"`
 }

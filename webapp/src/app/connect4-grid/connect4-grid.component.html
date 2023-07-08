@@ -3,8 +3,8 @@
     <h3>Configuration</h3>
     <mat-form-field>
       <span *ngFor="let player of players">
-        <mat-label *ngIf="player.isAi">minimax Player depth {{player.name}} </mat-label>
-        <input id="player.name" matInput type="number" [ngModel]="player.depth" *ngIf="player.isAi"
+        <mat-label>minimax Player depth {{player.name}} </mat-label>
+        <input id="player.name" matInput type="number" [ngModel]="player.depth"
                (ngModelChange)="updateDepth($event, player)"/>
       </span>
 

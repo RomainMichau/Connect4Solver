@@ -43,7 +43,7 @@ func InitController(game *game.Game, port int) {
 	r.HandleFunc("/api/token", controller.addTokenHandler).Methods("POST")
 	r.HandleFunc("/api/grid/reset", controller.resetHandler).Methods("POST")
 	r.HandleFunc("/api/solver/minimax", controller.miniMaxiHandler).Methods("GET")
-	r.HandleFunc("/api/configuration", controller.miniMaxiHandler).Methods("GET")
+	r.HandleFunc("/api/configuration", controller.getConfig).Methods("GET")
 	loggedRouter := handlers.LoggingHandler(os.Stdout, r)
 	log.Printf("starting server on port :%d\n", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", port), loggedRouter))

@@ -6,8 +6,9 @@ Game mode:
 - Human VS AI
 - AI VS AI
 
+
 # Online version
-https://connect4.romainmic.com/
+https://connect4-go.romainmic.com/
 
 # Generate OAS
 

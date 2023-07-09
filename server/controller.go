@@ -40,7 +40,7 @@ func InitController(game *game.Game, port int) {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/api/grid", controller.getGrid).Methods("GET")
-	r.HandleFunc("/swagger.json", specHandler).Methods("GET")
+	r.HandleFunc("/api/swagger.json", specHandler).Methods("GET")
 	r.HandleFunc("/api/token", controller.addTokenHandler).Methods("POST")
 	r.HandleFunc("/api/grid/reset", controller.resetHandler).Methods("POST")
 	r.HandleFunc("/api/solver/minimax", controller.miniMaxiHandler).Methods("GET")

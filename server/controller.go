@@ -127,7 +127,9 @@ func (c *Controller) resetHandler(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) getConfig(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(ConfigurationBody{
-		GithubUrl: "https://github.com/RomainMichau/Connect4Solver_go",
+		GithubUrl:    "https://github.com/RomainMichau/Connect4Solver_go",
+		Title:        "Connect4 Golang",
+		RelatedLinks: map[string]string{"Connect4 Rust": "https://connect4-rust.romainmic.com/"},
 	})
 }
 

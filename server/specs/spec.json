@@ -168,12 +168,25 @@
     "ConfigurationBody": {
       "type": "object",
       "required": [
-        "github_url"
+        "github_url",
+        "title",
+        "related_links"
       ],
       "properties": {
         "github_url": {
           "type": "string",
           "x-go-name": "GithubUrl"
+        },
+        "related_links": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "RelatedLinks"
+        },
+        "title": {
+          "type": "string",
+          "x-go-name": "Title"
         }
       },
       "x-go-package": "connect4solver"

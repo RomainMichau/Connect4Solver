@@ -74,4 +74,8 @@ type ConfigurationResponse struct {
 type ConfigurationBody struct {
 	// Required: true
 	GithubUrl string `json:"github_url"`
+	// Required: true
+	Title string `json:"title"`
+	// Required: true
+	RelatedLinks map[string]string `json:"related_links"`
 }

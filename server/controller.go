@@ -38,12 +38,12 @@ type Controller struct {
 func InitController(game *game.Game, port int) {
 	controller := Controller{game: game}
 	r := mux.NewRouter()
-
 	r.HandleFunc("/api/grid", controller.getGrid).Methods("GET")
 	r.HandleFunc("/api/swagger.json", specHandler).Methods("GET")
 	r.HandleFunc("/api/token", controller.addTokenHandler).Methods("POST")
 	r.HandleFunc("/api/grid/reset", controller.resetHandler).Methods("POST")
 	r.HandleFunc("/api/solver/minimax", controller.miniMaxiHandler).Methods("GET")
+	r.HandleFunc("/api/configuration", controller.miniMaxiHandler).Methods("GET")
 	loggedRouter := handlers.LoggingHandler(os.Stdout, r)
 	log.Printf("starting server on port :%d\n", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", port), loggedRouter))
@@ -117,6 +117,18 @@ func (c *Controller) addTokenHandler(w http.ResponseWriter, r *http.Request) {
 //	  200:
 func (c *Controller) resetHandler(w http.ResponseWriter, r *http.Request) {
 	c.game.Reset()
+}
+
+// swagger:route GET /api/configuration game get_configuration
+//
+// Responses:
+//
+//	200: ConfigurationResponse
+func (c *Controller) getConfig(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(ConfigurationBody{
+		GithubUrl: "https://github.com/RomainMichau/Connect4Solver_go",
+	})
 }
 
 // swagger:route GET /api/solver/minimax game minimax

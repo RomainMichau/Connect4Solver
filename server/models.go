@@ -64,3 +64,14 @@ type MiniMaxiResponseBody struct {
 	// Required: true
 	Scores []int `json:"scores"`
 }
+
+// swagger:response ConfigurationResponse
+type ConfigurationResponse struct {
+	// in: body
+	body *ConfigurationBody
+}
+
+type ConfigurationBody struct {
+	// Required: true
+	GithubUrl string `json:"github_url"`
+}

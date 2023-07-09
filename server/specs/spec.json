@@ -16,6 +16,19 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/configuration": {
+      "get": {
+        "tags": [
+          "game"
+        ],
+        "operationId": "get_configuration",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/ConfigurationResponse"
+          }
+        }
+      }
+    },
     "/api/grid": {
       "get": {
         "description": "Return the current grid the game",
@@ -152,6 +165,19 @@
       "format": "int64",
       "x-go-package": "connect4solver/game"
     },
+    "ConfigurationBody": {
+      "type": "object",
+      "required": [
+        "github_url"
+      ],
+      "properties": {
+        "github_url": {
+          "type": "string",
+          "x-go-name": "GithubUrl"
+        }
+      },
+      "x-go-package": "connect4solver"
+    },
     "GetGridResponseBody": {
       "type": "object",
       "required": [
@@ -215,6 +241,12 @@
       "description": "",
       "schema": {
         "$ref": "#/definitions/BadRequestErrorBody"
+      }
+    },
+    "ConfigurationResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/ConfigurationBody"
       }
     },
     "GetGridResponse": {

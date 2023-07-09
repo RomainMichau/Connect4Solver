@@ -38,14 +38,12 @@ type Controller struct {
 func InitController(game *game.Game, port int) {
 	controller := Controller{game: game}
 	r := mux.NewRouter()
-	spa := spaHandler{staticPath: "webapp/dist/connect4", indexPath: "index.html"}
 
 	r.HandleFunc("/api/grid", controller.getGrid).Methods("GET")
 	r.HandleFunc("/swagger.json", specHandler).Methods("GET")
 	r.HandleFunc("/api/token", controller.addTokenHandler).Methods("POST")
 	r.HandleFunc("/api/grid/reset", controller.resetHandler).Methods("POST")
 	r.HandleFunc("/api/solver/minimax", controller.miniMaxiHandler).Methods("GET")
-	r.PathPrefix("/").Handler(spa)
 	loggedRouter := handlers.LoggingHandler(os.Stdout, r)
 	log.Printf("starting server on port :%d\n", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", port), loggedRouter))

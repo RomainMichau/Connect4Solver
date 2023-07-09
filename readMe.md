@@ -6,6 +6,8 @@ Game mode:
 - Human VS AI
 - AI VS AI
 
+# Front end
+https://github.com/RomainMichau/Connect4_UI
 
 # Online version
 https://connect4-go.romainmic.com/

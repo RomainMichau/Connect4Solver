@@ -100,7 +100,7 @@ export class Connect4GridComponent implements OnInit {
         }
       }
     }, error => {
-      alert(error.error.Reason)
+      alert(error.error.reason)
     });
   }
 

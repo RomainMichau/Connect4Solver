@@ -130,6 +130,7 @@ func (c *Controller) getConfig(w http.ResponseWriter, r *http.Request) {
 		GithubUrl:    "https://github.com/RomainMichau/Connect4Solver_go",
 		Title:        "Connect4 Golang",
 		RelatedLinks: map[string]string{"Connect4 Rust": "https://connect4-rust.romainmic.com/"},
+		Help:         "Minimax scores are displayed on the top line of the grid",
 	})
 }
 

@@ -170,12 +170,17 @@
       "required": [
         "github_url",
         "title",
-        "related_links"
+        "related_links",
+        "help"
       ],
       "properties": {
         "github_url": {
           "type": "string",
           "x-go-name": "GithubUrl"
+        },
+        "help": {
+          "type": "string",
+          "x-go-name": "Help"
         },
         "related_links": {
           "type": "object",

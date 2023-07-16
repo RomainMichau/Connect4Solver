@@ -78,4 +78,6 @@ type ConfigurationBody struct {
 	Title string `json:"title"`
 	// Required: true
 	RelatedLinks map[string]string `json:"related_links"`
+	// Required: true
+	Help string `json:"help"`
 }

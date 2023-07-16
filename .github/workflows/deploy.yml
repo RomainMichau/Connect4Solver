@@ -1,0 +1,15 @@
+on:
+  push:
+    branches: [ "master" ]
+jobs:
+  deploy:
+    runs-on: self-hosted
+    name: Trigger rokim_conf repo deploy tash
+    steps:
+      - name: Deploy
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: RomainMichau/rokim_conf
+          event-type: trigger-deploy
+          client-payload: '{"tag": "connect4_", "source":"https://github.com/RomainMichau/Connect4Solver_go"}'
